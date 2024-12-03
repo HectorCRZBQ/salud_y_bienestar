@@ -1,10 +1,11 @@
 from aws_cdk import (
     aws_ec2 as ec2,
-    core as cdk,
+    Stack,
+    Tags,
 )
 from constructs import Construct
 
-class EC2Stack(cdk.Stack):
+class EC2Stack(Stack):
     def __init__(self, scope: Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
 
@@ -57,4 +58,6 @@ class EC2Stack(cdk.Stack):
         )
 
         # Agregar un nombre a la instancia (Tag opcional)
-        cdk.Tags.of(instance).add("Name", "MyCDKInstance")
+        Tags.of(instance).add("Name", "MyCDKInstance")
+        Tags.of(instance).add("Proyecto", "Salud y Bienestar")
+        Tags.of(instance).add("Ambiente", "Desarrollo")
