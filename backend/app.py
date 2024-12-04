@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, request, redirect
 from prometheus_flask_exporter import PrometheusMetrics
 import mysql.connector
 
@@ -67,7 +67,7 @@ def form():
 
         # Redirigir al usuario de vuelta al formulario para un nuevo ingreso
         return redirect("/")
-    return render_template("form.html")
+    
 
 
 if __name__ == "__main__":
