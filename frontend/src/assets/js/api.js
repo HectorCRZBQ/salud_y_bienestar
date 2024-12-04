@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.querySelector("form");
-    const apiUrl = "http://127.0.0.1:5000/api/users/";
+    const apiUrl = "/api/users/";
 
     form.addEventListener("submit", async (event) => {
         event.preventDefault(); // Evita el envío predeterminado del formulario
