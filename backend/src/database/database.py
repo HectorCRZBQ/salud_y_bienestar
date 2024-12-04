@@ -2,7 +2,7 @@ import mysql.connector
 from mysql.connector import Error
 import time
 import logging
-from config import Config
+from src.config import Config
 
 def get_connection(max_retries=5):
 
