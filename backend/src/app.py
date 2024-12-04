@@ -1,6 +1,6 @@
 from flask import Flask
-from models.contact import User
-from routes.routes import user_bp
+from src.models.contact import User
+from src.routes.routes import user_bp
 
 def create_app():
     app = Flask(__name__)

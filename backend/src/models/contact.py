@@ -1,4 +1,4 @@
-from database.database import get_connection
+from src.database.database import get_connection
 
 class User:
     @staticmethod
