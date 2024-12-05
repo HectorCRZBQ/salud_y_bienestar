@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const message = document.getElementById("demo-message").value.trim();
 
         // Validaciones básicas
-        if (!name || !email || !category || !message) {
+        if (!name || !email || !message) {
             alert("Por favor, completa todos los campos obligatorios.");
             return;
         }
@@ -22,8 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const formData = {
             nombre: name,
             email: email,
-            categoria: category,
-            prioridad: priority,
             mensaje: message
         };
 
