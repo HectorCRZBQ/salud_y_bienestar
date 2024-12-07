@@ -12,8 +12,6 @@ class User:
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 nombre VARCHAR(100),
                 email VARCHAR(100),
-                categoria VARCHAR(50),
-                prioridad VARCHAR(10),
                 mensaje TEXT
             )
             """)
@@ -25,16 +23,16 @@ class User:
             print(f"Error al crear la tabla 'usuarios': {e}")
 
     @staticmethod
-    def create_user(nombre, email, categoria, prioridad, mensaje):
+    def create_user(nombre, email, mensaje):
         """Inserta un nuevo usuario en la tabla."""
         try:
             connection = get_connection()
             cursor = connection.cursor()
             query = """
-            INSERT INTO usuarios (nombre, email, categoria, prioridad, mensaje)
+            INSERT INTO usuarios (nombre, email, mensaje)
             VALUES (%s, %s, %s, %s, %s)
             """
-            cursor.execute(query, (nombre, email, categoria, prioridad, mensaje))
+            cursor.execute(query, (nombre, email, mensaje))
             connection.commit()
             cursor.close()
             connection.close()
