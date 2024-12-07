@@ -3,17 +3,15 @@ from src.models.contact import User
 
 user_bp = Blueprint('user', __name__)
 
-@user_bp.route("/", methods=["GET","POST"])
+@user_bp.route("/api/users/contact", methods=["GET","POST"])
 def create_user():
     data = request.get_json()
-    nombre = data.get("nombre")
+    nombre = data.get("name")  # Changed from "nombre" to match frontend
     email = data.get("email")
-    categoria = data.get("categoria")
-    prioridad = data.get("prioridad")
-    mensaje = data.get("mensaje")
+    mensaje = data.get("message")  # Changed from "mensaje" to match frontend
     
-    if not all([nombre, email, categoria, prioridad, mensaje]):
+    if not all([nombre, email, mensaje]):
         return jsonify({"error": "Todos los campos son obligatorios"}), 400
     
-    response = User.create_user(nombre, email, categoria, prioridad, mensaje)
+    response = User.create_user(nombre, email, mensaje)
     return jsonify(response)
