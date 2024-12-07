@@ -37,7 +37,7 @@ services:
     image: mariadb:latest
     container_name: db
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: empresa_db
       MYSQL_USER: empresa_user
       MYSQL_PASSWORD: userpassword
