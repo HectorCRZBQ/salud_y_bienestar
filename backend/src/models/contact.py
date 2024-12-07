@@ -30,7 +30,7 @@ class User:
             cursor = connection.cursor()
             query = """
             INSERT INTO usuarios (nombre, email, mensaje)
-            VALUES (%s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s)
             """
             cursor.execute(query, (nombre, email, mensaje))
             connection.commit()
@@ -38,4 +38,5 @@ class User:
             connection.close()
             return {"message": "Usuario creado exitosamente"}
         except Exception as e:
-            return {"error": str(e)}
+            # Devuelve el error para fines de depuración
+            return {"error": f"Error al insertar usuario: {e}"}
