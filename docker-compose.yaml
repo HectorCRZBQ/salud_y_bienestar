@@ -7,7 +7,7 @@ services:
       context: ./backend
     volumes:
       - ./backend:/app
-      - ./frontend/src:/frontend/src  # Mount frontend static files
+      - ./frontend/src:/frontend/src
     environment:
       DB_HOST: db
       DB_USER: admin
@@ -24,7 +24,7 @@ services:
     container_name: nginx
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./frontend/src:/usr/share/nginx/html  # Serve static files
+      - ./frontend/src:/usr/share/nginx/html
     ports:
       - "8080:80"
     depends_on:
@@ -32,7 +32,20 @@ services:
     networks:
       - app_network
     restart: unless-stopped
-  
+
+  nginx_exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    container_name: nginx_exporter
+    ports:
+      - "9113:9113"
+    environment:
+      NGINX_STATUS_URL: "http://nginx/metrics"
+    depends_on:
+      - nginx
+    networks:
+      - app_network
+    restart: unless-stopped
+
   db:
     image: mariadb:10.6
     container_name: db
