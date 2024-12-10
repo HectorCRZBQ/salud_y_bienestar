@@ -74,6 +74,19 @@ services:
       - app_network
     restart: unless-stopped
 
+  mariadb_exporter:
+    image: prom/mysqld-exporter:latest
+    container_name: mariadb_exporter
+    environment:
+      - DATA_SOURCE_NAME=admin:1234@tcp(db:3306)/syb  # Usando las credenciales y base de datos
+    ports:
+      - "9104:9104"
+    depends_on:
+      - db
+    networks:
+      - app_network
+    restart: unless-stopped
+
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -131,7 +144,6 @@ services:
       - ./elk-config/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
       - ./elk-config/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ls_data:/usr/share/logstash/data
-      # Montar los volúmenes de logs
       - /nginx_logs:/var/log/nginx
       - /mysql_logs:/var/log/mysql
       - /var/log/flask:/var/log/flask
