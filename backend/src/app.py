@@ -7,6 +7,7 @@ import time
 import logging
 from logging.handlers import RotatingFileHandler
 import os
+from flask_cors import CORS
 
 # Métricas personalizadas
 REQUEST_COUNT = Counter(
@@ -62,6 +63,8 @@ def setup_error_handlers(app):
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your_secret_key'
+
+    CORS(app)
 
     # Crear tablas a través de los modelos
     User.create_table()
