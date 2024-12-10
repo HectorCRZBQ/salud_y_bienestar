@@ -74,7 +74,6 @@ services:
       - app_network
     restart: unless-stopped
 
-
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -129,7 +128,10 @@ services:
       - ./elk-config/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
       - ./elk-config/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ls_data:/usr/share/logstash/data
-
+      # Montar los volúmenes de logs
+      - /nginx_logs:/var/log/nginx
+      - /mysql_logs:/var/log/mysql
+      - /var/log/flask:/var/log/flask
     networks:
       - app_network
     depends_on:
