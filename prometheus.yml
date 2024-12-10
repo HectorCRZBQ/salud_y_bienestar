@@ -6,7 +6,7 @@ scrape_configs:
     static_configs:
       - targets: ['nginx_exporter:9113']
 
-  - job_name: 'flask'
+  - job_name: 'api'
     static_configs:
       - targets: ['api:5000']
 
