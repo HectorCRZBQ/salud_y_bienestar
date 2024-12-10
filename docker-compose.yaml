@@ -96,7 +96,7 @@ services:
       - "9300:9300"
     volumes:
       - test_data:/usr/share/elasticsearch/data/
-      - ./elk-config/elasticsearch/elasticsearch.yaml:/usr/share/elasticsearch/config/elasticsearch.yaml
+      - ./elk-config/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     environment:
       - discovery.type=single-node
       - http.host=0.0.0.0
@@ -116,7 +116,7 @@ services:
       - "9600:9600"
     volumes:
       - ./elk-config/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-      - ./elk-config/logstash/logstash.yaml:/usr/share/logstash/config/logstash.yaml
+      - ./elk-config/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ls_data:/usr/share/logstash/data
 
     networks:
@@ -130,7 +130,7 @@ services:
     ports:
       - "5601:5601"
     volumes:
-      - ./elk-config/kibana/kibana.yaml:/usr/share/kibana/config/kibana.yaml
+      - ./elk-config/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
       - kb_data:/usr/share/kibana/data
     networks:
       - app_network
