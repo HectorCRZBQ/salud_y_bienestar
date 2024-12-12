@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify
 from src.models.contact import User
+from src.models.register import Register
+
 
 user_bp = Blueprint('user', __name__)
 
@@ -21,3 +23,17 @@ def create_user():
 
     # Para método GET (opcional, si quisieras devolver algo)
     return jsonify({"message": "Método no soportado"}), 405
+
+@user_bp.route("/api/users/register", methods=["GET", "POST"])
+def register_user():
+    data = request.get_json()
+    usuario = data.get("email")
+    contrasena = data.get("password")
+
+    # Validación de campos
+    if not all([usuario, contrasena]):
+        return jsonify({"error": "Todos los campos son obligatorios"}), 400
+
+    # Llamada al modelo para registrar el usuario
+    response = Register.create_user(usuario, contrasena)
+    return jsonify(response)

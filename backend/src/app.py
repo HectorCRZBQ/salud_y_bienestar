@@ -3,6 +3,7 @@ from prometheus_client import make_wsgi_app, Counter, Histogram
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from src.models.contact import User
 from src.routes.routes import user_bp
+from src.models.register import Register
 import time
 
 # Métricas personalizadas
@@ -24,6 +25,7 @@ def create_app():
 
     # Crear tablas a través de los modelos
     User.create_table()
+    Register.create_table()
 
     # Registrar rutas
     app.register_blueprint(user_bp)
