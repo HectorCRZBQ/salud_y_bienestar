@@ -28,7 +28,7 @@ services:
       - ./frontend/src:/usr/share/nginx/html
       - /nginx_logs:/var/log/nginx
     ports:
-      - "8080:80"
+      - "80:80"
     depends_on:
       - api
     networks:
