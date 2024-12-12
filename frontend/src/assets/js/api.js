@@ -1,149 +1,83 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const form = document.querySelector("#atencion-al-cliente form");
-    const apiUrl = "/api/users/contact";  
-
-    // Email validation regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    // Function to validate form inputs
-    function validateForm(name, email, message) {
-        const errors = [];
+    // Zona Clientes Form
+    const zonaClientesForm = document.querySelector("#zona-clientes form");
+    const zonaClientesApiUrl = "/api/users/register";
 
-        // Name validation
-        if (!name || name.trim().length < 2) {
-            errors.push("El nombre debe tener al menos 2 caracteres.");
-        }
+    if (zonaClientesForm) {
+        zonaClientesForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const email = zonaClientesForm.querySelector("#email").value.trim();
+            const password = zonaClientesForm.querySelector("#password").value.trim();
 
-        // Email validation
-        if (!email || !emailRegex.test(email.trim())) {
-            errors.push("Por favor, ingrese un correo electrónico válido.");
-        }
+            console.log("Email:", email, " password:", password);
 
-        // Message validation
-        if (!message || message.trim().length < 10) {
-            errors.push("El mensaje debe tener al menos 10 caracteres.");
-        }
-
-        return errors;
-    }
-
-    // Function to display errors
-    function displayErrors(errors) {
-        // Remove any existing error messages
-        const existingErrors = document.querySelectorAll('.form-error');
-        existingErrors.forEach(el => el.remove());
-
-        // Create error container
-        const errorContainer = document.createElement('div');
-        errorContainer.className = 'form-error text-danger';
-        
-        // Create error list
-        const errorList = document.createElement('ul');
-        errors.forEach(error => {
-            const li = document.createElement('li');
-            li.textContent = error;
-            errorList.appendChild(li);
-        });
-
-        errorContainer.appendChild(errorList);
-
-        // Insert error container before the submit button
-        const submitButton = form.querySelector('input[type="submit"]');
-        submitButton.parentNode.insertBefore(errorContainer, submitButton);
-    }
-
-    form.addEventListener("submit", async (event) => {
-        event.preventDefault(); // Prevent default form submission
-
-        // Capture form data
-        const name = document.getElementById("name").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const message = document.getElementById("message").value.trim();
-
-        // Validate form inputs
-        const validationErrors = validateForm(name, email, message);
-
-        // If there are validation errors, display them and stop
-        if (validationErrors.length > 0) {
-            displayErrors(validationErrors);
-            return;
-        }
-
-        // Prepare data for API request
-        const formData = {
-            name: name,
-            email: email,
-            message: message
-        };
-
-        try {
-            // Send request to API
-            const response = await fetch(apiUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formData)
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                // Success handling
-                alert("Mensaje enviado con éxito");
-                form.reset(); // Clear the form
-                
-                // Remove any previous error messages
-                const errorContainer = form.querySelector('.form-error');
-                if (errorContainer) {
-                    errorContainer.remove();
-                }
-            } else {
-                // Error handling
-                throw new Error(result.error || "Error al enviar el mensaje");
+            const validationErrors = validateZonaClientesForm(email, password);
+            if (validationErrors.length > 0) {
+                displayErrors(zonaClientesForm, validationErrors);
+                return;
             }
-        } catch (error) {
-            // Network or server error handling
-            displayErrors([error.message]);
-        }
-    });
-});
 
-document.addEventListener("DOMContentLoaded", () => {
-    const form = document.querySelector("#zona-clientes form");
-    const apiUrl = "/api/users/register"; // URL para la ruta de registro
+            const formData = { email: email, password: password };
+            await sendPostRequest(zonaClientesApiUrl, formData, zonaClientesForm, "Usuario registrado con éxito");
+        });
+    }
 
-    // Email validation regex
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Atención al Cliente Form
+    const atencionClienteForm = document.querySelector("#atencion-al-cliente form");
+    const atencionClienteApiUrl = "/api/users/contact";
 
-    // Function to validate form inputs
-    function validateForm(email, password) {
+    if (atencionClienteForm) {
+        atencionClienteForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const name = atencionClienteForm.querySelector("#name").value.trim();
+            const email = atencionClienteForm.querySelector("#email").value.trim();
+            const message = atencionClienteForm.querySelector("#message").value.trim();
+
+            const validationErrors = validateAtencionClienteForm(name, email, message);
+            if (validationErrors.length > 0) {
+                displayErrors(atencionClienteForm, validationErrors);
+                return;
+            }
+
+            const formData = { name: name, email: email, message: message };
+            await sendPostRequest(atencionClienteApiUrl, formData, atencionClienteForm, "Mensaje enviado con éxito");
+        });
+    }
+
+    function validateZonaClientesForm(email, password) {
         const errors = [];
-
-        // Email validation
-        if (!email || !emailRegex.test(email.trim())) {
+        if (!email || !emailRegex.test(email)) {
             errors.push("Por favor, ingrese un correo electrónico válido.");
         }
-
-        // Password validation
-        if (!password || password.trim().length < 6) {
+        if (!password || password.length < 6) {
             errors.push("La contraseña debe tener al menos 6 caracteres.");
         }
-
         return errors;
     }
 
-    // Function to display errors
-    function displayErrors(errors) {
-        // Remove any existing error messages
-        const existingErrors = document.querySelectorAll('.form-error');
+    function validateAtencionClienteForm(name, email, message) {
+        const errors = [];
+        if (!name || name.length < 2) {
+            errors.push("El nombre debe tener al menos 2 caracteres.");
+        }
+        if (!email || !emailRegex.test(email)) {
+            errors.push("Por favor, ingrese un correo electrónico válido.");
+        }
+        if (!message || message.length < 10) {
+            errors.push("El mensaje debe tener al menos 10 caracteres.");
+        }
+        return errors;
+    }
+
+    function displayErrors(form, errors) {
+        const existingErrors = form.querySelectorAll('.form-error');
         existingErrors.forEach(el => el.remove());
 
-        // Create error container
         const errorContainer = document.createElement('div');
         errorContainer.className = 'form-error text-danger';
 
-        // Create error list
         const errorList = document.createElement('ul');
         errors.forEach(error => {
             const li = document.createElement('li');
@@ -153,62 +87,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
         errorContainer.appendChild(errorList);
 
-        // Insert error container before the submit button
         const submitButton = form.querySelector('input[type="submit"]');
         submitButton.parentNode.insertBefore(errorContainer, submitButton);
     }
 
-    form.addEventListener("submit", async (event) => {
-        event.preventDefault(); // Prevent default form submission
-
-        // Capture form data
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
-
-        // Validate form inputs
-        const validationErrors = validateForm(email, password);
-
-        // If there are validation errors, display them and stop
-        if (validationErrors.length > 0) {
-            displayErrors(validationErrors);
-            return;
-        }
-
-        // Prepare data for API request
-        const formData = {
-            username: email, // Map email to 'username' for the backend
-            password: password
-        };
-
+    async function sendPostRequest(apiUrl, formData, form, successMessage) {
         try {
-            // Send request to API
             const response = await fetch(apiUrl, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formData)
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
             });
 
             const result = await response.json();
 
             if (response.ok) {
-                // Success handling
-                alert("Usuario registrado con éxito");
-                form.reset(); // Clear the form
-                
-                // Remove any previous error messages
+                alert(successMessage);
+                form.reset();
                 const errorContainer = form.querySelector('.form-error');
-                if (errorContainer) {
-                    errorContainer.remove();
-                }
+                if (errorContainer) errorContainer.remove();
             } else {
-                // Error handling
-                throw new Error(result.error || "Error al registrar el usuario");
+                throw new Error(result.error || "Error en el envío.");
             }
         } catch (error) {
-            // Network or server error handling
-            displayErrors([error.message]);
+            displayErrors(form, [error.message]);
         }
-    });
+    }
 });
