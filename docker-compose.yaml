@@ -133,6 +133,7 @@ services:
       - bootstrap.memory_lock=true
     networks:
       - app_network
+    restart: always
 
   logstash:
     image: logstash:7.9.1
@@ -151,6 +152,7 @@ services:
       - app_network
     depends_on:
       - elasticsearch
+    restart: always
 
   kibana:
     image: kibana:7.9.1
@@ -164,6 +166,7 @@ services:
       - app_network
     depends_on:
       - elasticsearch
+    restart: always
 
 networks:
   app_network:
